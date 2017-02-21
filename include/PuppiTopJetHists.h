@@ -1,0 +1,32 @@
+#pragma once
+
+#include "UHH2/core/include/Hists.h"
+#include "TH2F.h"
+
+namespace uhh2examples {
+
+
+class PuppiTopJetHists: public uhh2::Hists {
+public:
+    // use the same constructor arguments as Hists for forwarding:
+    PuppiTopJetHists(uhh2::Context & ctx, const std::string & dirname);
+
+    virtual void fill(const uhh2::Event & ev) override;
+    virtual ~PuppiTopJetHists();
+
+  protected:
+    bool berror;
+
+    //TopJet pT scale
+    TH2F *TopJetPtScale_Eta0to1p3,*TopJetPtScale_Eta1p3to2,*TopJetPtScale_Eta2to2p5,*TopJetPtScale_Eta2p5to3,*TopJetPtScale_Eta3to10;
+
+    //TopJet mass scale
+    TH2F *TopJetMassScale_Eta0to1p3,*TopJetMassScale_Eta1p3to2,*TopJetMassScale_Eta2to2p5,*TopJetMassScale_Eta2p5to3,*TopJetMassScale_Eta3to10;
+
+    //TopJet Efficiency
+    TH1F *TopJetEfficiency_GenTopJetEta,*TopJetEfficiency_GenTopJetPt, *TopJetEfficiency_GenTopJetNPV,*TopJetEfficiency_GenTopJetEta_matchedTopJet,*TopJetEfficiency_GenTopJetPt_matchedTopJet, *TopJetEfficiency_GenTopJetNPV_matchedTopJet;
+
+
+  };
+
+}
