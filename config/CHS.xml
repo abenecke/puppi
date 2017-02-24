@@ -26,7 +26,7 @@
 
 
  <!--                    QCD                   -->
-  <InputData Version="QCD" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+  <InputData Version="QCD_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &QCD; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
  
         

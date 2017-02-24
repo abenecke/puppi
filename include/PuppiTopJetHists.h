@@ -1,8 +1,11 @@
 #pragma once
 
+#include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Hists.h"
 #include "TH2F.h"
 
+using namespace std;
+using namespace uhh2;
 namespace uhh2examples {
 
 
@@ -26,6 +29,11 @@ public:
     //TopJet Efficiency
     TH1F *TopJetEfficiency_GenTopJetEta,*TopJetEfficiency_GenTopJetPt, *TopJetEfficiency_GenTopJetNPV,*TopJetEfficiency_GenTopJetEta_matchedTopJet,*TopJetEfficiency_GenTopJetPt_matchedTopJet, *TopJetEfficiency_GenTopJetNPV_matchedTopJet;
 
+    //TopJet Purity
+    TH1F *TopJetPurity_RecoTopJetEta,*TopJetPurity_RecoTopJetPt, *TopJetPurity_RecoTopJetNPV,*TopJetPurity_RecoTopJetEta_matchedTopJet,*TopJetPurity_RecoTopJetPt_matchedTopJet, *TopJetPurity_RecoTopJetNPV_matchedTopJet;
+
+    //AK8 jets without precut in n-tuples
+    Event::Handle<vector<Jet>> h_myAK8jets;
 
   };
 

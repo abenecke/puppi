@@ -23,7 +23,8 @@ public:
     TH1F *JetEfficiency_GenJetEta,*JetEfficiency_GenJetPt, *JetEfficiency_GenJetNPV,*JetEfficiency_GenJetEta_matchedjet,*JetEfficiency_GenJetPt_matchedjet, *JetEfficiency_GenJetNPV_matchedjet;
 
     //Jet Purity
-    TH2F *JetPurity_GenJetEta, *JetPurity_GenJetPt, *JetPurity_GenJetNPV;
+    TH1F *JetPurity_RecoJetEta,*JetPurity_RecoJetPt, *JetPurity_RecoJetNPV,*JetPurity_RecoJetEta_matchedjet,*JetPurity_RecoJetPt_matchedjet, *JetPurity_RecoJetNPV_matchedjet;
+
 };
 
 }
