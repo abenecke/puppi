@@ -33,6 +33,7 @@ namespace uhh2examples {
   private:
     bool berror; 
     Event::Handle<vector<Jet>> h_myAK8jets;
+    Event::Handle<vector<Jet>> h_myAK8jets_uncorrected;
 
     std::unique_ptr<AnalysisModule> printer;
 
@@ -40,11 +41,9 @@ namespace uhh2examples {
 
     std::unique_ptr<JetCleaner> jet_pt_30to40_sel;
     std::unique_ptr<JetCleaner> jet_pt_100to150_sel;
-    std::unique_ptr<JetCleaner> jet_pt_25_sel;
 
     std::unique_ptr<TopJetCleaner> topjet_pt_30to40_sel;
     std::unique_ptr<TopJetCleaner> topjet_pt_100to150_sel;
-    std::unique_ptr<TopJetCleaner> topjet_pt_25_sel;
 
     ///////////////////////////    Hists    /////////////////////////////////  
     
@@ -86,18 +85,16 @@ namespace uhh2examples {
   PuppiModule::PuppiModule(Context & ctx){
     berror=(ctx.get("debug") == "true");
     h_myAK8jets = ctx.get_handle<vector<Jet>>("patJetsAK8PFPUPPI");
-
+    h_myAK8jets_uncorrected =ctx.declare_event_output< std::vector<Jet> > ("myAK8jets_uncorrected");
     printer.reset(new GenParticlesPrinter(ctx));
 
     ///////////////////////////    Selections    /////////////////////////////////  
 
     jet_pt_30to40_sel.reset(new JetCleaner(ctx,PtEtaCut( 30., 11,40.)));
     jet_pt_100to150_sel.reset(new JetCleaner(ctx,PtEtaCut( 100., 11,150)));
-    jet_pt_25_sel.reset(new JetCleaner(ctx,PtEtaCut( 25, 11)));
 
     topjet_pt_30to40_sel.reset(new TopJetCleaner(ctx,PtEtaCut( 30., 11,40.)));
     topjet_pt_100to150_sel.reset(new TopJetCleaner(ctx,PtEtaCut( 100., 11,150)));
-    topjet_pt_25_sel.reset(new TopJetCleaner(ctx,PtEtaCut( 25, 11)));
 
     ///////////////////////////    Hists    /////////////////////////////////  
 
@@ -105,20 +102,20 @@ namespace uhh2examples {
     uncorrected_h_topjet.reset(new JetHists (ctx, "uncorrected_TopJets",4,"patJetsAK8PFPUPPI"));
 
     input_h_jet.reset(new JetHists     (ctx, "input_Jets"));
-    input_h_topjet.reset(new JetHists (ctx, "input_TopJets",4,"patJetsAK8PFPUPPI"));
+    input_h_topjet.reset(new JetHists (ctx, "input_TopJets",4,"myAK8jets_uncorrected"));
     input_h_event.reset(new EventHists (ctx, "input_Event"));
 
     pt_30to40_h_jet.reset(new JetHists     (ctx, "pt_30to40_Jets"));
-    pt_30to40_h_topjet.reset(new JetHists (ctx, "pt_30to40_TopJets",4,"patJetsAK8PFPUPPI"));
+    pt_30to40_h_topjet.reset(new JetHists (ctx, "pt_30to40_TopJets",4,"myAK8jets_uncorrected"));
     pt_30to40_h_event.reset(new EventHists (ctx, "pt_30to40_Event"));
 
     pt_25_h_jet.reset(new JetHists     (ctx, "pt_25_Jets"));
-    pt_25_h_topjet.reset(new JetHists (ctx, "pt_25_TopJets",4,"patJetsAK8PFPUPPI"));
+    pt_25_h_topjet.reset(new JetHists (ctx, "pt_25_TopJets",4,""));
     pt_25_h_event.reset(new EventHists (ctx, "pt_25_Event"));
 
 
     pt_100to150_h_jet.reset(new JetHists     (ctx, "pt_100to150_Jets"));
-    pt_100to150_h_topjet.reset(new JetHists (ctx, "pt_100to150_TopJets",4,"patJetsAK8PFPUPPI"));
+    pt_100to150_h_topjet.reset(new JetHists (ctx, "pt_100to150_TopJets",4,"myAK8jets_uncorrected"));
     pt_100to150_h_event.reset(new EventHists (ctx, "pt_100to150_Event"));
     
     h_jet_input.reset(new PuppiJetHists(ctx, "jet_input"));
@@ -137,17 +134,20 @@ namespace uhh2examples {
   bool PuppiModule::process(Event & event) {
     if(berror) std::cout<<" ====================    New Event   ===================="<<std::endl;
     if(berror) printer->process(event);
-    const vector<Jet> &  myAK8jets = event.get(h_myAK8jets);
+    vector<Jet>  myAK8jets = event.get(h_myAK8jets);
+   
 
     uncorrected_h_jet   ->fill(event);
     uncorrected_h_topjet ->fill(event);
 
     if(berror)  std::cout<<"-------- PuppiModul::Jec_factor_raw -------"<<std::endl;
     ///////////////////////////   Jets and topjets back correcting  ///////////////////////////////// 
-    for (auto & jet:*event.jets)jet.set_v4(jet.v4() * jet.JEC_factor_raw() );
-    for (auto  jet:myAK8jets) jet.set_v4(jet.v4() * jet.JEC_factor_raw() );
+    for (auto & jet:*event.jets)  jet.set_v4(jet.v4() * jet.JEC_factor_raw() );
+    if(berror) std::cout<<"myAK8jets first jet mass  "<<myAK8jets.at(0).v4().M()<<std::endl;
+    for (auto & jet:myAK8jets)   jet.set_v4(jet.v4() * jet.JEC_factor_raw() );
+    if(berror) std::cout<<"after JEC raw corrected myAK8jets first jet mass  "<<myAK8jets.at(0).v4().M()<<std::endl;
     sort_by_pt<Jet>(*event.jets);
-
+    event.set(h_myAK8jets_uncorrected,myAK8jets);
 
     input_h_jet   ->fill(event);
     input_h_event   ->fill(event);
@@ -209,7 +209,6 @@ namespace uhh2examples {
 
     if(berror)  std::cout<<"-------- PuppiModul::Jet Efficiency and Purity -------"<<std::endl;
     ///////////////////////////  Jet Efficiency and Purity   ///////////////////////////////// 
-    jet_pt_25_sel->process(event);
     h_jet_pt_25->fill(event);
     pt_25_h_jet   ->fill(event);
     pt_25_h_event   ->fill(event);
@@ -221,7 +220,6 @@ namespace uhh2examples {
 
     if(berror)  std::cout<<"-------- PuppiModul::TopJet Efficiency and Purity -------"<<std::endl;
     ///////////////////////////  TopJet Efficiency and Purity   ///////////////////////////////// 
-    topjet_pt_25_sel->process(event);
     h_topjet_pt_25->fill(event);
     pt_25_h_topjet   ->fill(event);
 
