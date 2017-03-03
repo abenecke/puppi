@@ -25,6 +25,9 @@ public:
     //Jet Purity
     TH1F *JetPurity_RecoJetEta,*JetPurity_RecoJetPt, *JetPurity_RecoJetNPV,*JetPurity_RecoJetEta_matchedjet,*JetPurity_RecoJetPt_matchedjet, *JetPurity_RecoJetNPV_matchedjet;
 
+
+    //General
+    TH1F *JetRecoPT, *JetGenPT, *MET;
 };
 
 }

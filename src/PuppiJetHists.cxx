@@ -35,6 +35,11 @@ PuppiJetHists::PuppiJetHists(Context & ctx, const string & dirname): Hists(ctx, 
   JetPurity_RecoJetNPV = book<TH1F>("JetPurity_RecoJetNPV", "Jet Purity NPV",80,0,80); 
   JetPurity_RecoJetNPV_matchedjet = book<TH1F>("JetPurity_RecoJetNPV_matchedjet", "Jet Purity NPV",80,0,80 ); 
 
+  /////////////////////////////////////////////////////////////     General Hists             //////////////////////////////////////////////////////////
+  JetRecoPT= book <TH1F>("JetRecoPT", "Jet Reco PT",500,0,500);
+  JetGenPT= book <TH1F>("JetGenPT", "Jet Gen PT",500,0,500);
+  MET = book<TH1F>("MET", "uncorrected MET",500,0,500);
+
 }
 
 
@@ -99,27 +104,42 @@ void PuppiJetHists::fill(const Event & event){
   ////////////////////////////////////////   Jet Efficiency   /////////////////////////////////////////
   double genp_eta_matched=0;
   double genp_pt_matched=0;
+  //cleaning of the GenJetcollection to 25 GeV
+  std::unique_ptr< std::vector<Particle> > genjets_pt25 (new std::vector<Particle> (*event.genjets));
+  if(berror)std::cout<<"genjets_pt25 vorher  "<<genjets_pt25->size() <<std::endl;
+  genjets_pt25->clear();
+  genjets_pt25->reserve(event.genjets->size());
+  if(berror)std::cout<<"event.genjets vorher  "<<event.genjets->size() <<std::endl;
+  for(auto j:*event.genjets){
+    genp_pt = j.pt();
+    if(berror)std::cout<<"pt der genjets  "<<genp_pt<<std::endl;
+    if(genp_pt>25)genjets_pt25->push_back(j);
+  }
+
+  if(berror) std::cout<<"genjets_pt25 hinterher  "<<genjets_pt25->size() <<std::endl;
 
 
-  for(unsigned int j=0;j<genparticles->size();j++){
-    double genp_eta = genparticles->at(j).eta();
-    genp_pt = genparticles->at(j).pt();
+  for(unsigned int j=0;j<genjets_pt25->size();j++){
+    double genp_eta = genjets_pt25->at(j).eta();
+    genp_pt = genjets_pt25->at(j).pt();
 
     JetEfficiency_GenJetEta->Fill(genp_eta,weight);
     JetEfficiency_GenJetPt->Fill(genp_pt,weight);
-  }//over all genparticles
+  }//over all genjets_pt25
 
   for(unsigned int i=0;i<jets->size();i++){
+    double reco_pt = jets->at(i).pt();
+    JetRecoPT->Fill(reco_pt,weight);
     //do matching 
-    for(unsigned int j=0;j<genparticles->size();j++){
-      double deltaR_gen_jet = deltaR(genparticles->at(j),jets->at(i));
+    for(unsigned int j=0;j<genjets_pt25->size();j++){
+      double deltaR_gen_jet = deltaR(genjets_pt25->at(j),jets->at(i));
       if(deltaR_gen_jet<0.2){
-	genp_eta_matched = genparticles->at(j).eta();
-	genp_pt_matched = genparticles->at(j).pt();
+	genp_eta_matched = genjets_pt25->at(j).eta();
+	genp_pt_matched = genjets_pt25->at(j).pt();
 	JetEfficiency_GenJetEta_matchedjet->Fill(genp_eta_matched,weight);
 	JetEfficiency_GenJetPt_matchedjet->Fill(genp_pt_matched,weight);
       }
-    }//for-loop over all genparticles
+    }//for-loop over all genjets_pt25
    
 
   }//for-loop over all jets
@@ -130,30 +150,41 @@ void PuppiJetHists::fill(const Event & event){
   double reco_eta_matched=0;
   double reco_pt_matched=0;
 
+  //cleaning of the Jetcollection to 25 GeV
+  std::unique_ptr< std::vector<Jet> > jets_pt25 (new std::vector<Jet> (*event.jets));
+  jets_pt25->clear();
+  jets_pt25->reserve(event.jets->size());
+  for(auto j:*event.jets){
+    double reco_pt = j.pt();
+    if(reco_pt>25)jets_pt25->push_back(j);
+  }
 
-  for(unsigned int j=0;j<jets->size();j++){
-    double reco_eta = jets->at(j).eta();
-    double reco_pt = jets->at(j).pt();
-
+  for(unsigned int j=0;j<jets_pt25->size();j++){
+    double reco_eta = jets_pt25->at(j).eta();
+    double reco_pt = jets_pt25->at(j).pt();
+    
     JetPurity_RecoJetEta->Fill(reco_eta,weight);
     JetPurity_RecoJetPt->Fill(reco_pt,weight);
-  }//over all jets
+  }//over all jets_pt25
 
-  for(unsigned int i=0;i<jets->size();i++){
+  for(unsigned int i=0;i<jets_pt25->size();i++){
     //do matching 
     for(unsigned int j=0;j<genparticles->size();j++){
-      double deltaR_gen_jet = deltaR(genparticles->at(j),jets->at(i));
+      genp_pt = genparticles->at(j).pt();
+      JetGenPT->Fill(genp_pt,weight);
+      double deltaR_gen_jet = deltaR(genparticles->at(j),jets_pt25->at(i));
       if(deltaR_gen_jet<0.2){
-	reco_eta_matched = jets->at(i).eta();
-	reco_pt_matched = jets->at(i).pt();
+	reco_eta_matched = jets_pt25->at(i).eta();
+	reco_pt_matched = jets_pt25->at(i).pt();
 	JetPurity_RecoJetEta_matchedjet->Fill(reco_eta_matched,weight);
 	JetPurity_RecoJetPt_matchedjet->Fill(reco_pt_matched,weight);
       }
     }//for-loop over all genparticles
    
 
-  }//for-loop over all jets
+  }//for-loop over all jets_pt25
 
+  MET->Fill(event.met->uncorr_pt(),weight);
 }
 
 PuppiJetHists::~PuppiJetHists(){}
