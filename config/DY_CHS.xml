@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
+
+	  <!ENTITY NEVT "-1">
+	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/puppi_test">
+	  <!ENTITY PROOFdir  "/nfs/dust/cms/user/abenecke/PROOF">
+	  <!ENTITY b_Cacheable  "False">
+
+	 
+	  <!ENTITY MC_DYJetsToLL_M_50_HT_100to200 SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml"> 
+	  <!ENTITY MC_DYJetsToLL_M_50_HT_1200to2500 SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml"> 
+	  <!ENTITY MC_DYJetsToLL_M_50_HT_200to400 SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml"> 
+	  <!ENTITY MC_DYJetsToLL_M_50_HT_2500toInf SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml"> 
+	  <!ENTITY MC_DYJetsToLL_M_50_HT_400to600 SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml"> 
+	  <!ENTITY MC_DYJetsToLL_M_50_HT_600to800 SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml"> 
+	  <!ENTITY MC_DYJetsToLL_M_50_HT_70to100 SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml"> 
+	  <!ENTITY MC_DYJetsToLL_M_50_HT_800to1200 SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml"> 
+
+
+
+]>
+
+<!--
+<ConfigParse NEventsBreak="0" FileSplit="10" />
+<ConfigSGE RAM ="4" DISK ="2" Mail="anna.benecke@desy.de" Notification="as" Workdir="workdir_Puppi"/>
+-->
+
+
+<JobConfiguration JobName="ExampleCycleJob" OutputLevel="INFO">
+    <Library Name="libSUHH2Puppi"/>
+    <Package Name="SUHH2Puppi.par" />
+
+   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&SELdir;/" PostFix="_test" TargetLumi="1" >
+   <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/ottjoc/proof-wd/" ProofNodes="2" OutputDirectory="./" PostFix="" TargetLumi="1" >  -->
+        
+
+
+ <!--                    DY                   -->
+  
+  <InputData Version="MC_DYJetsToLL_M_50_HT_100to200" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_DYJetsToLL_M_50_HT_100to200; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
+  <InputData Version="MC_DYJetsToLL_M_50_HT_1200to2500" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_DYJetsToLL_M_50_HT_1200to2500; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+  <InputData Version="MC_DYJetsToLL_M_50_HT_200to400" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_DYJetsToLL_M_50_HT_200to400; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+  <InputData Version="MC_DYJetsToLL_M_50_HT_2500toInf" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_DYJetsToLL_M_50_HT_2500toInf; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+  <InputData Version="MC_DYJetsToLL_M_50_HT_400to600" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_DYJetsToLL_M_50_HT_400to600; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+  <InputData Version="MC_DYJetsToLL_M_50_HT_600to800" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_DYJetsToLL_M_50_HT_600to800; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+  <InputData Version="MC_DYJetsToLL_M_50_HT_70to100" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_DYJetsToLL_M_50_HT_70to100; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+  <InputData Version="MC_DYJetsToLL_M_50_HT_800to1200" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_DYJetsToLL_M_50_HT_800to1200; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>   
+
+ 
+
+
+
+
+
+
+            
+        <UserConfig>
+            <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" /> 
+            <Item Name="MuonCollection" Value="slimmedMuonsUSER" />
+	    <Item Name="ElectronCollection" Value="slimmedElectronsUSER" />
+            <Item Name="JetCollection" Value="slimmedJets" />
+	    <Item Name="TopJetCollection" Value="patJetsAk8PuppiJetsSoftDropPacked_daughters" />
+            <Item Name="GenJetCollection" Value="slimmedGenJets" />
+	    <Item Name="GenTopJetCollection" Value="ak8GenJetsSoftDrop" />
+            <Item Name="METName" Value="slimmedMETs" />
+            <Item Name="GenParticleCollection" Value="GenParticles" /> 
+             <Item Name="additionalBranches" Value="patJetsAK8PFCHS" />
+           
+            <Item Name="AnalysisModule" Value="DYModule" /> 
+            
+         
+            <Item Name="use_sframe_weight" Value="false" />
+
+            <Item Name="mode" Value="Puppi" />
+            <Item Name="channel" Value="muon" />
+          
+            <Item Name="pileup_directory" Value="" />
+            
+            <Item Name="debug" Value="false" />
+           
+        </UserConfig>
+    </Cycle>
+</JobConfiguration>
