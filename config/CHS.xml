@@ -2,11 +2,11 @@
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
 
 	  <!ENTITY NEVT "-1">
-	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/Puppi/rootfiles">
+	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/CHS">
 	  <!ENTITY PROOFdir  "/nfs/dust/cms/user/abenecke/PROOF">
-	  <!ENTITY b_Cacheable  "True">
+	  <!ENTITY b_Cacheable  "False">
 
-	  <!ENTITY QCD SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Flat_pythia8.xml"> 
+	  <!ENTITY MC_QCD_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Flat_pythia8.xml"> 
 
 ]>
 
@@ -26,8 +26,8 @@
 
 
  <!--                    QCD                   -->
-  <InputData Version="QCD_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
-    &QCD; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
+  <InputData Version="MC_QCD_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_QCD_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
  
         
         
@@ -38,15 +38,20 @@
             <Item Name="JetCollection" Value="slimmedJets" />
 	    <Item Name="TopJetCollection" Value="slimmedJetsAK8_SoftDrop" />
             <Item Name="GenJetCollection" Value="slimmedGenJets" />
-            <Item Name="METName" Value="slimmedMETsPuppi" />
+	    <Item Name="GenTopJetCollection" Value="ak8GenJetsSoftDrop" />
+            <Item Name="METName" Value="slimmedMETs" />
             <Item Name="GenParticleCollection" Value="GenParticles" /> 
             
+             <Item Name="additionalBranches" Value="patJetsAK8PFCHS" />
            
             <Item Name="AnalysisModule" Value="PuppiModule" /> 
             
          
             <Item Name="use_sframe_weight" Value="false" />
             
+            <Item Name="mode" Value="CHS" />
+
+            <Item Name="debug" Value="false" />
           
             <Item Name="pileup_directory" Value="" />
             

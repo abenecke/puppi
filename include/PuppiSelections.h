@@ -2,6 +2,8 @@
 
 #include "UHH2/core/include/fwd.h"
 #include "UHH2/core/include/Selection.h"
+#include "UHH2/core/include/Event.h"
+#include "UHH2/core/include/Utils.h"
 
 namespace uhh2examples {
     
@@ -10,13 +12,29 @@ namespace uhh2examples {
  * maximum third jet pt fraction can be changed in the constructor.
  * The jets are assumed to be sorted in pt.
  */
-class DijetSelection: public uhh2::Selection {
+
+class ZmassCut: public uhh2::Selection {
 public:
-    DijetSelection(float dphi_min = 2.7f, float third_frac_max = 0.2f);
+    ZmassCut(double threshold);
     virtual bool passes(const uhh2::Event & event) override;
 private:
-    float dphi_min, third_frac_max;
+    double threshold;
+    double inv_mass;  
+    Muon muon_pos;
+    Muon muon_neg;
+
 };
 
+class ZptCut: public uhh2::Selection {
+public:
+    ZptCut(double threshold, TString minmax);
+    virtual bool passes(const uhh2::Event & event) override;
+private:
+    double threshold;
+    double inv_pt;  
+    Muon muon_pos;
+    Muon muon_neg;
+    TString minmax;
 
+};
 }

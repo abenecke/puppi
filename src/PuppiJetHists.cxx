@@ -144,6 +144,9 @@ void PuppiJetHists::fill(const Event & event){
 
   }//for-loop over all jets
 
+  // double gen_npv;
+  // double reco_npv;
+  // JetEfficiency_GenJetNPV->Fill(gen_npv,weight);
 
   if(berror) std::cout<<"PuppiJetHists::JetPurity"<<std::endl;
  ////////////////////////////////////////   Jet Purity   /////////////////////////////////////////

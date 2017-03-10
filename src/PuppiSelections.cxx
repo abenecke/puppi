@@ -7,19 +7,58 @@ using namespace uhh2examples;
 using namespace uhh2;
 
 
-DijetSelection::DijetSelection(float dphi_min_, float third_frac_max_): dphi_min(dphi_min_), third_frac_max(third_frac_max_){}
+
+
+
+ZmassCut::ZmassCut(double threshold_): threshold(threshold_){}
     
-bool DijetSelection::passes(const Event & event){
-    assert(event.jets); // if this fails, it probably means jets are not read in
-    if(event.jets->size() < 2) return false;
-    const auto & jet0 = event.jets->at(0);
-    const auto & jet1 = event.jets->at(1);
-    auto dphi = deltaPhi(jet0, jet1);
-    if(dphi < dphi_min) return false;
-    if(event.jets->size() == 2) return true;
-    const auto & jet2 = event.jets->at(2);
-    auto third_jet_frac = jet2.pt() / (0.5 * (jet0.pt() + jet1.pt()));
-    return third_jet_frac < third_frac_max;
+bool ZmassCut::passes(const Event & event){
+    assert(event.muons); // if this fails, it probably means muons are not read in
+    std::vector<Muon> *muons = event.muons;
+ 
+
+    for(auto m:*muons){
+      if(m.charge()==1){
+	muon_pos=m;
+	break;
+      }
+    }
+    for(auto m:*muons){
+      if(m.charge()==-1){
+	muon_neg=m;
+	break;
+      }
+    }
+
+
+    inv_mass=(muon_pos.v4() + muon_neg.v4()).M();
+    return inv_mass<threshold;
+
 }
 
+ZptCut::ZptCut(double threshold_, TString minmax_): threshold(threshold_),minmax(minmax_){}
+    
+bool ZptCut::passes(const Event & event){
+    assert(event.muons); // if this fails, it probably means muons are not read in
+    std::vector<Muon> *muons = event.muons;
+ 
 
+    for(auto m:*muons){
+      if(m.charge()==1){
+	muon_pos=m;
+	break;
+      }
+    }
+    for(auto m:*muons){
+      if(m.charge()==-1){
+	muon_neg=m;
+	break;
+      }
+    }
+
+
+    inv_pt=(muon_pos.v4() + muon_neg.v4()).pt();
+    if(minmax=="max") return inv_pt<threshold;
+    if(minmax=="min") return inv_pt>threshold;
+
+}

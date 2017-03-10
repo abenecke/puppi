@@ -84,7 +84,8 @@ namespace uhh2examples {
 
   PuppiModule::PuppiModule(Context & ctx){
     berror=(ctx.get("debug") == "true");
-    h_myAK8jets = ctx.get_handle<vector<Jet>>("patJetsAK8PFPUPPI");
+    if(ctx.get("mode")=="Puppi")  h_myAK8jets = ctx.get_handle<vector<Jet>>("patJetsAK8PFPUPPI");
+    else h_myAK8jets = ctx.get_handle<vector<Jet>>("patJetsAK8PFCHS");
     h_myAK8jets_uncorrected =ctx.declare_event_output< std::vector<Jet> > ("myAK8jets_uncorrected");
     printer.reset(new GenParticlesPrinter(ctx));
 
@@ -99,7 +100,8 @@ namespace uhh2examples {
     ///////////////////////////    Hists    /////////////////////////////////  
 
     uncorrected_h_jet.reset(new JetHists     (ctx, "uncorrected_Jets"));
-    uncorrected_h_topjet.reset(new JetHists (ctx, "uncorrected_TopJets",4,"patJetsAK8PFPUPPI"));
+    if(ctx.get("mode")=="Puppi")  uncorrected_h_topjet.reset(new JetHists (ctx, "uncorrected_TopJets",4,"patJetsAK8PFPUPPI"));
+    else uncorrected_h_topjet.reset(new JetHists (ctx, "uncorrected_TopJets",4,"patJetsAK8PFCHS"));
 
     input_h_jet.reset(new JetHists     (ctx, "input_Jets"));
     input_h_topjet.reset(new JetHists (ctx, "input_TopJets",4,"myAK8jets_uncorrected"));
