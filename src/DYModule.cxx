@@ -223,7 +223,7 @@ namespace uhh2examples {
     uncorrected_Zptk50_h_topjet.reset(new JetHists (ctx, "uncorrected_Zptk50_TopJets",4,"patJetsAK8PFCHS"));
     uncorrected_Zptk50_h_event.reset(new EventHists (ctx, "uncorrected_Zptk50_Event"));
     uncorrected_Zptk50_h_muon.reset(new MuonHists (ctx, "uncorrected_Zptk50_Muon"));
-    uncorrected_Zptk50_h_electron.reset(new ElectronHists (ctx, "Zptk50_Electron"));
+    uncorrected_Zptk50_h_electron.reset(new ElectronHists (ctx, "uncorrected_Zptk50_Electron"));
 
    
     uncorrected_h_jet_Zptk50.reset(new PuppiJetHists(ctx, "uncorrected_jet_Zptk50"));
@@ -313,6 +313,7 @@ namespace uhh2examples {
     if(berror) printer->process(event);
     vector<Jet>  myAK8jets = event.get(h_myAK8jets);
    
+    event.set(h_myAK8jets_uncorrected,myAK8jets);
 
     uncorrected_h_jet   ->fill(event);
     uncorrected_h_topjet ->fill(event);
@@ -328,7 +329,7 @@ namespace uhh2examples {
     uncorrected_h_topjet_input->fill(event);
     uncorrected_h_DY_input->fill(event);
 
-    if(berror)  std::cout<<"-------- DYModul::Selection -------"<<std::endl;
+    if(berror)  std::cout<<"-------- DYModul::uncorrected Selection -------"<<std::endl;
     ///////////////////////////////////////////////////          Selection    //////////////////////////////////////////
     if(channel=="muon")muo_cleaner->process(event);
     else ele_cleaner->process(event);
@@ -339,7 +340,7 @@ namespace uhh2examples {
     if(!pass_ZmassCut)return false;
 
 
-    if(berror)  std::cout<<"-------- DYModul::ZPt <50 -------"<<std::endl;
+    if(berror)  std::cout<<"-------- DYModul::uncorrected ZPt <50 -------"<<std::endl;
     ///////////////////////////////////////////////////          ZPt <50     //////////////////////////////////////////
     bool pass_Zptk50 = Zptk50_sel->passes(event);
     if(pass_Zptk50){
@@ -356,7 +357,7 @@ namespace uhh2examples {
     uncorrected_h_DY_Zptk50->fill(event);
     }
 
-    if(berror)  std::cout<<"-------- DYModul::ZPt >50 -------"<<std::endl;
+    if(berror)  std::cout<<"-------- DYModul::uncorrected ZPt >50 -------"<<std::endl;
     ///////////////////////////////////////////////////          ZPt >50     //////////////////////////////////////////
     bool pass_Zptg50 = Zptg50_sel->passes(event);
     if(pass_Zptg50){
@@ -373,7 +374,7 @@ namespace uhh2examples {
     uncorrected_h_DY_Zptg50->fill(event);
     }
 
-    if(berror)  std::cout<<"-------- DYModul::Output -------"<<std::endl;
+    if(berror)  std::cout<<"-------- DYModul::uncorrected Output -------"<<std::endl;
     ///////////////////////////////////////////////////          output     //////////////////////////////////////////
     //output hist after selection
     uncorrected_output_h_jet   ->fill(event);
