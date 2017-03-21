@@ -44,7 +44,7 @@ PuppiJetHists::PuppiJetHists(Context & ctx, const string & dirname): Hists(ctx, 
 
 
 void PuppiJetHists::fill(const Event & event){
-
+if(berror) std::cout<<"in PuppiJetHists  "<<std::endl;
   assert(event.met);
   assert(event.pvs);
   assert(event.jets);
