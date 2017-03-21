@@ -60,5 +60,5 @@ bool ZptCut::passes(const Event & event){
     inv_pt=(muon_pos.v4() + muon_neg.v4()).pt();
     if(minmax=="max") return inv_pt<threshold;
     if(minmax=="min") return inv_pt>threshold;
-
+    return inv_pt<threshold;
 }
