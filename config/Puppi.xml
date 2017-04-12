@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
 
-	  <!ENTITY NEVT "100">
+	  <!ENTITY NEVT "-1">
 	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/puppi_test">
 	  <!ENTITY PROOFdir  "/nfs/dust/cms/user/abenecke/PROOF">
 	  <!ENTITY b_Cacheable  "False">
@@ -28,18 +28,18 @@
     <Library Name="libSUHH2Puppi"/>
     <Package Name="SUHH2Puppi.par" />
 
-   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&SELdir;/" PostFix="_test" TargetLumi="1" >
+   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&SELdir;/" PostFix="" TargetLumi="1" >
    <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/ottjoc/proof-wd/" ProofNodes="2" OutputDirectory="./" PostFix="" TargetLumi="1" >  -->
         
 
 
  <!--                    QCD                   -->
-  <InputData Version="QCD" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+ <InputData Version="QCD" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &QCD; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
  
         
   <!--                    GJets                   -->
-  <InputData Version="MC_GJets_HT_100To200" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+<!--  <InputData Version="MC_GJets_HT_100To200" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_GJets_HT_100To200; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
   <InputData Version="MC_GJets_HT_200To400" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_GJets_HT_200To400; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
@@ -48,7 +48,7 @@
   <InputData Version="MC_GJets_HT_40To100" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_GJets_HT_40To100; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
   <InputData Version="MC_GJets_HT_600ToInf" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
-    &MC_GJets_HT_600ToInf; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>    
+    &MC_GJets_HT_600ToInf; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>    -->
 
  
 

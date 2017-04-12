@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
 
-	  <!ENTITY NEVT "100">
-	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/puppi_test/DY-Puppi/muon">
+	  <!ENTITY NEVT "-1">
+	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/puppi_test/DY-Puppi/elec">
 	  <!ENTITY PROOFdir  "/nfs/dust/cms/user/abenecke/PROOF">
 	  <!ENTITY b_Cacheable  "False">
 
@@ -39,10 +39,10 @@
   
   <InputData Version="MC_DYJetsToLL_M_50_HT_100to200" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_DYJetsToLL_M_50_HT_100to200; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
-  <InputData Version="MC_DYJetsToLL_M_50_HT_1200to2500" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+ <InputData Version="MC_DYJetsToLL_M_50_HT_1200to2500" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_DYJetsToLL_M_50_HT_1200to2500; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
-  <InputData Version="MC_DYJetsToLL_M_50_HT_200to400" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
-    &MC_DYJetsToLL_M_50_HT_200to400; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+ <!-- <InputData Version="MC_DYJetsToLL_M_50_HT_200to400" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_DYJetsToLL_M_50_HT_200to400; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>-->
   <InputData Version="MC_DYJetsToLL_M_50_HT_2500toInf" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_DYJetsToLL_M_50_HT_2500toInf; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
   <InputData Version="MC_DYJetsToLL_M_50_HT_400to600" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
@@ -52,7 +52,7 @@
   <InputData Version="MC_DYJetsToLL_M_50_HT_70to100" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_DYJetsToLL_M_50_HT_70to100; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
   <InputData Version="MC_DYJetsToLL_M_50_HT_800to1200" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
-    &MC_DYJetsToLL_M_50_HT_800to1200; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>   
+    &MC_DYJetsToLL_M_50_HT_800to1200; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
 
  
 
@@ -80,7 +80,7 @@
             <Item Name="use_sframe_weight" Value="false" />
 
             <Item Name="mode" Value="Puppi" />
-            <Item Name="channel" Value="muon" />
+            <Item Name="channel" Value="elec" />
           
             <Item Name="pileup_directory" Value="" />
             

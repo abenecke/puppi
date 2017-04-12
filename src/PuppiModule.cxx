@@ -50,6 +50,38 @@ namespace uhh2examples {
     std::unique_ptr<uhh2::Hists> uncorrected_h_jet;
     std::unique_ptr<uhh2::Hists> uncorrected_h_topjet;
 
+    /////////////////////////////        uncorrected     ///////////////////////////////
+    //default histogramms
+    std::unique_ptr<uhh2::Hists> uncorrected_input_h_jet;
+    std::unique_ptr<uhh2::Hists>uncorrected_input_h_topjet;
+    std::unique_ptr<uhh2::Hists>uncorrected_input_h_event;
+
+
+    std::unique_ptr<PuppiJetHists> uncorrected_h_jet_input; 
+    std::unique_ptr<PuppiTopJetHists> uncorrected_h_topjet_input;
+
+    std::unique_ptr<PuppiJetHists>uncorrected_h_jet_pt_30to40; 
+    std::unique_ptr<PuppiJetHists> uncorrected_h_jet_pt_100to150;
+    std::unique_ptr<PuppiJetHists> uncorrected_h_jet_pt_25;
+
+    std::unique_ptr<uhh2::Hists> uncorrected_pt_30to40_h_jet;
+    std::unique_ptr<uhh2::Hists>uncorrected_pt_30to40_h_topjet;
+    std::unique_ptr<uhh2::Hists>uncorrected_pt_30to40_h_event;
+
+    std::unique_ptr<uhh2::Hists> uncorrected_pt_25_h_jet;
+    std::unique_ptr<uhh2::Hists>uncorrected_pt_25_h_topjet;
+    std::unique_ptr<uhh2::Hists>uncorrected_pt_25_h_event;
+
+    std::unique_ptr<uhh2::Hists> uncorrected_pt_100to150_h_jet;
+    std::unique_ptr<uhh2::Hists>uncorrected_pt_100to150_h_topjet;
+    std::unique_ptr<uhh2::Hists>uncorrected_pt_100to150_h_event;
+
+
+    std::unique_ptr<PuppiTopJetHists> uncorrected_h_topjet_pt_30to40; 
+    std::unique_ptr<PuppiTopJetHists> uncorrected_h_topjet_pt_100to150; 
+    std::unique_ptr<PuppiTopJetHists> uncorrected_h_topjet_pt_25; 
+
+    /////////////////////////////         corrected     ///////////////////////////////
     //default histogramms
     std::unique_ptr<uhh2::Hists> input_h_jet;
     std::unique_ptr<uhh2::Hists>input_h_topjet;
@@ -102,7 +134,37 @@ namespace uhh2examples {
     uncorrected_h_jet.reset(new JetHists     (ctx, "uncorrected_Jets"));
     if(ctx.get("mode")=="Puppi")  uncorrected_h_topjet.reset(new JetHists (ctx, "uncorrected_TopJets",4,"patJetsAK8PFPUPPI"));
     else uncorrected_h_topjet.reset(new JetHists (ctx, "uncorrected_TopJets",4,"patJetsAK8PFCHS"));
+    
+    ////////////////////////////////   uncorrected   ///////////////////////////////////////
+    uncorrected_input_h_jet.reset(new JetHists     (ctx, "uncorrected_input_Jets"));
+    uncorrected_input_h_topjet.reset(new JetHists (ctx, "uncorrected_input_TopJets",4,"myAK8jets_uncorrected"));
+    uncorrected_input_h_event.reset(new EventHists (ctx, "uncorrected_input_Event"));
 
+    uncorrected_pt_30to40_h_jet.reset(new JetHists     (ctx, "uncorrected_pt_30to40_Jets"));
+    uncorrected_pt_30to40_h_topjet.reset(new JetHists (ctx, "uncorrected_pt_30to40_TopJets",4,"myAK8jets_uncorrected"));
+    uncorrected_pt_30to40_h_event.reset(new EventHists (ctx, "uncorrected_pt_30to40_Event"));
+
+    uncorrected_pt_25_h_jet.reset(new JetHists     (ctx, "uncorrected_pt_25_Jets"));
+    uncorrected_pt_25_h_topjet.reset(new JetHists (ctx, "uncorrected_pt_25_TopJets",4,""));
+    uncorrected_pt_25_h_event.reset(new EventHists (ctx, "uncorrected_pt_25_Event"));
+
+
+    uncorrected_pt_100to150_h_jet.reset(new JetHists     (ctx, "uncorrected_pt_100to150_Jets"));
+    uncorrected_pt_100to150_h_topjet.reset(new JetHists (ctx, "uncorrected_pt_100to150_TopJets",4,"myAK8jets_uncorrected"));
+    uncorrected_pt_100to150_h_event.reset(new EventHists (ctx, "uncorrected_pt_100to150_Event"));
+    
+    uncorrected_h_jet_input.reset(new PuppiJetHists(ctx, "uncorrected_jet_input"));
+    uncorrected_h_topjet_input.reset(new PuppiTopJetHists(ctx, "uncorrected_topjet_input"));
+
+    uncorrected_h_jet_pt_30to40.reset(new PuppiJetHists(ctx, "uncorrected_jet_pt_30to40"));
+    uncorrected_h_jet_pt_100to150.reset(new PuppiJetHists(ctx, "uncorrected_jet_pt_100to150"));
+    uncorrected_h_jet_pt_25.reset(new PuppiJetHists(ctx, "uncorrected_jet_pt_25"));
+
+    uncorrected_h_topjet_pt_30to40.reset(new PuppiTopJetHists(ctx, "uncorrected_topjet_pt_30to40"));
+    uncorrected_h_topjet_pt_100to150.reset(new PuppiTopJetHists(ctx, "uncorrected_topjet_pt_100to150"));
+    uncorrected_h_topjet_pt_25.reset(new PuppiTopJetHists(ctx, "uncorrected_topjet_pt_25"));
+
+    ////////////////////////////////   corrected   ///////////////////////////////////////
     input_h_jet.reset(new JetHists     (ctx, "input_Jets"));
     input_h_topjet.reset(new JetHists (ctx, "input_TopJets",4,"myAK8jets_uncorrected"));
     input_h_event.reset(new EventHists (ctx, "input_Event"));
@@ -141,6 +203,89 @@ namespace uhh2examples {
 
     uncorrected_h_jet   ->fill(event);
     uncorrected_h_topjet ->fill(event);
+
+    event.set(h_myAK8jets_uncorrected,myAK8jets);
+
+    uncorrected_input_h_jet   ->fill(event);
+    uncorrected_input_h_event   ->fill(event);
+    uncorrected_input_h_topjet ->fill(event);
+
+
+    uncorrected_h_jet_input->fill(event);
+    uncorrected_h_topjet_input->fill(event);
+
+    if(berror)  std::cout<<"-------- PuppiModul::uncorrected JetPTScale 30 to 40 -------"<<std::endl;
+    ///////////////////////////    Jet PT Scale  30 to 40  ///////////////////////////////// 
+    std::unique_ptr< std::vector<Jet> > uncorrected_uncleaned_jets (new std::vector<Jet> (*event.jets));
+    jet_pt_30to40_sel->process(event);
+    uncorrected_h_jet_pt_30to40->fill(event);
+    uncorrected_pt_30to40_h_jet   ->fill(event);
+    uncorrected_pt_30to40_h_event   ->fill(event);
+   
+ 
+    event.jets->clear();
+    event.jets->reserve(uncorrected_uncleaned_jets->size());
+    for(const auto & j : *uncorrected_uncleaned_jets) event.jets->push_back(j); 
+    sort_by_pt<Jet>(*event.jets);
+
+    if(berror)  std::cout<<"-------- PuppiModul::uncorrected JetPTScale 100 to 150 -------"<<std::endl;
+    ///////////////////////////    Jet PT Scale  100 to 150  ///////////////////////////////// 
+    jet_pt_100to150_sel->process(event);
+    uncorrected_h_jet_pt_100to150->fill(event);
+    uncorrected_pt_100to150_h_jet   ->fill(event);
+    uncorrected_pt_100to150_h_event   ->fill(event);
+
+    event.jets->clear();
+    event.jets->reserve(uncorrected_uncleaned_jets->size());
+    for(const auto & j : *uncorrected_uncleaned_jets) event.jets->push_back(j); 
+    sort_by_pt<Jet>(*event.jets);
+
+
+    if(berror)  std::cout<<"-------- PuppiModul::uncorrected TopJetPTScale 30 to 40 -------"<<std::endl;
+    ///////////////////////////    TopJet PT Scale  30 to 40  ///////////////////////////////// 
+    std::unique_ptr< std::vector<TopJet> > uncorrected_uncleaned_topjets (new std::vector<TopJet> (*event.topjets));
+    topjet_pt_30to40_sel->process(event);
+    uncorrected_h_topjet_pt_30to40->fill(event);
+    uncorrected_pt_30to40_h_topjet ->fill(event);
+
+    event.topjets->clear();
+    event.topjets->reserve(uncorrected_uncleaned_topjets->size());
+    for(const auto & j : *uncorrected_uncleaned_topjets) event.topjets->push_back(j); 
+    sort_by_pt<TopJet>(*event.topjets);
+
+    if(berror)  std::cout<<"-------- PuppiModul::uncorrected TopJetPTScale 100 to 150 -------"<<std::endl;
+    ///////////////////////////    TopJet PT Scale  100 to 150  ///////////////////////////////// 
+    topjet_pt_100to150_sel->process(event);
+    uncorrected_h_topjet_pt_100to150->fill(event); 
+    uncorrected_pt_100to150_h_topjet ->fill(event);
+
+    event.topjets->clear();
+    event.topjets->reserve(uncorrected_uncleaned_topjets->size());
+    for(const auto & j : *uncorrected_uncleaned_topjets) event.topjets->push_back(j); 
+    sort_by_pt<TopJet>(*event.topjets);
+
+    if(berror)  std::cout<<"-------- PuppiModul::uncorrected Jet Efficiency and Purity -------"<<std::endl;
+    ///////////////////////////  Jet Efficiency and Purity   ///////////////////////////////// 
+    uncorrected_h_jet_pt_25->fill(event);
+    uncorrected_pt_25_h_jet   ->fill(event);
+    uncorrected_pt_25_h_event   ->fill(event);
+
+    event.jets->clear();
+    event.jets->reserve(uncorrected_uncleaned_jets->size());
+    for(const auto & j : *uncorrected_uncleaned_jets) event.jets->push_back(j); 
+    sort_by_pt<Jet>(*event.jets);
+
+    if(berror)  std::cout<<"-------- PuppiModul::uncorrected TopJet Efficiency and Purity -------"<<std::endl;
+    ///////////////////////////  TopJet Efficiency and Purity   ///////////////////////////////// 
+    uncorrected_h_topjet_pt_25->fill(event);
+    uncorrected_pt_25_h_topjet   ->fill(event);
+
+    event.jets->clear();
+    event.jets->reserve(uncorrected_uncleaned_jets->size());
+    for(const auto & j : *uncorrected_uncleaned_jets) event.jets->push_back(j); 
+    sort_by_pt<Jet>(*event.jets);
+
+
 
     if(berror)  std::cout<<"-------- PuppiModul::Jec_factor_raw -------"<<std::endl;
     ///////////////////////////   Jets and topjets back correcting  ///////////////////////////////// 

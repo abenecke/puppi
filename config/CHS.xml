@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
 
-	  <!ENTITY NEVT "100">
-	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/puppi_test/CHS">
+	  <!ENTITY NEVT "-1">
+	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/puppi_test">
 	  <!ENTITY PROOFdir  "/nfs/dust/cms/user/abenecke/PROOF">
 	  <!ENTITY b_Cacheable  "False">
 
 	  <!ENTITY MC_QCD_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Flat_pythia8.xml"> 
-
+	  <!ENTITY MC_GJets_HT_100To200_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_GJets_HT-100To200.xml"> 
+	  <!ENTITY MC_GJets_HT_200To400_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_GJets_HT-200To400.xml"> 
+	  <!ENTITY MC_GJets_HT_400To600_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_GJets_HT-400To600.xml"> 
+	  <!ENTITY MC_GJets_HT_40To100_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_GJets_HT-40To100.xml"> 
+	  <!ENTITY MC_GJets_HT_600ToInf_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_GJets_HT-600ToInf.xml"> 
 ]>
 
 <!--
@@ -20,7 +24,7 @@
     <Library Name="libSUHH2Puppi"/>
     <Package Name="SUHH2Puppi.par" />
 
-   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&SELdir;/" PostFix="_test" TargetLumi="1" >
+   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&SELdir;/" PostFix="" TargetLumi="1" >
    <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/ottjoc/proof-wd/" ProofNodes="2" OutputDirectory="./" PostFix="" TargetLumi="1" >  -->
         
 
@@ -29,7 +33,18 @@
   <InputData Version="MC_QCD_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_QCD_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
  
-        
+    <!--                    GJets                   -->
+ <InputData Version="MC_GJets_HT_100To200_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_GJets_HT_100To200_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
+  <InputData Version="MC_GJets_HT_200To400_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_GJets_HT_200To400_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
+  <InputData Version="MC_GJets_HT_400To600_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_GJets_HT_400To600_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
+  <InputData Version="MC_GJets_HT_40To100_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_GJets_HT_40To100_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
+  <InputData Version="MC_GJets_HT_600ToInf_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &MC_GJets_HT_600ToInf_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>    
+     
         
             
         <UserConfig>

@@ -20,9 +20,9 @@ public:
 private:
     double threshold;
     double inv_mass;  
-    Muon muon_pos;
-    Muon muon_neg;
-
+    FlavorParticle lep_pos;
+    FlavorParticle lep_neg;
+   
 };
 
 class ZptCut: public uhh2::Selection {
@@ -32,9 +32,9 @@ public:
 private:
     double threshold;
     double inv_pt;  
-    Muon muon_pos;
-    Muon muon_neg;
+    FlavorParticle lep_pos;
+    FlavorParticle lep_neg;
     TString minmax;
-
+   
 };
 }

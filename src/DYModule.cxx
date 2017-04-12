@@ -164,6 +164,7 @@ namespace uhh2examples {
 
   DYModule::DYModule(Context & ctx){
     berror=(ctx.get("debug") == "true");
+    //  berror=true;
     if(ctx.get("mode")=="Puppi")  h_myAK8jets = ctx.get_handle<vector<Jet>>("patJetsAK8PFPUPPI");
     else h_myAK8jets = ctx.get_handle<vector<Jet>>("patJetsAK8PFCHS");
     h_myAK8jets_uncorrected =ctx.declare_event_output< std::vector<Jet> > ("myAK8jets_uncorrected");
@@ -175,6 +176,7 @@ namespace uhh2examples {
     else if(channel == "elec") channel_ = elec;
     else throw std::runtime_error("ZprimeSelectionModule -- undefined argument for 'channel' key in xml file (must be 'muon' or 'elec'): "+channel);
 
+   
 
     ///////////////////////////    Cleaner    /////////////////////////////////  
     muo_cleaner.reset(new MuonCleaner    (AndId<Muon>    (PtEtaCut  (20., 11), MuonIDTight(),MuonIso(0.15))));
@@ -208,7 +210,7 @@ namespace uhh2examples {
 
     ////////////////// uncorrected  ///////////////////////////
     uncorrected_input_h_jet.reset(new JetHists     (ctx, "uncorrected_input_Jets"));
-    uncorrected_input_h_topjet.reset(new JetHists (ctx, "uncorrected_input_TopJets",4,"patJetsAK8PFCHS"));
+    uncorrected_input_h_topjet.reset(new JetHists (ctx, "uncorrected_input_TopJets",4,"myAK8jets_uncorrected"));
     uncorrected_input_h_event.reset(new EventHists (ctx, "uncorrected_input_Event"));
     uncorrected_input_h_muon.reset(new MuonHists (ctx, "uncorrected_input_Muon"));
     uncorrected_input_h_electron.reset(new ElectronHists (ctx, "uncorrected_input_Electron"));
@@ -220,7 +222,7 @@ namespace uhh2examples {
 
     //Zptk50 hist after selection
     uncorrected_Zptk50_h_jet.reset(new JetHists     (ctx, "uncorrected_Zptk50_Jets"));
-    uncorrected_Zptk50_h_topjet.reset(new JetHists (ctx, "uncorrected_Zptk50_TopJets",4,"patJetsAK8PFCHS"));
+    uncorrected_Zptk50_h_topjet.reset(new JetHists (ctx, "uncorrected_Zptk50_TopJets",4,"myAK8jets_uncorrected"));
     uncorrected_Zptk50_h_event.reset(new EventHists (ctx, "uncorrected_Zptk50_Event"));
     uncorrected_Zptk50_h_muon.reset(new MuonHists (ctx, "uncorrected_Zptk50_Muon"));
     uncorrected_Zptk50_h_electron.reset(new ElectronHists (ctx, "uncorrected_Zptk50_Electron"));
@@ -232,7 +234,7 @@ namespace uhh2examples {
 
     //Zptg50 hist after selection
     uncorrected_Zptg50_h_jet.reset(new JetHists     (ctx, "uncorrected_Zptg50_Jets"));
-    uncorrected_Zptg50_h_topjet.reset(new JetHists (ctx, "uncorrected_Zptg50_TopJets",4,"patJetsAK8PFCHS"));
+    uncorrected_Zptg50_h_topjet.reset(new JetHists (ctx, "uncorrected_Zptg50_TopJets",4,"myAK8jets_uncorrected"));
     uncorrected_Zptg50_h_event.reset(new EventHists (ctx, "uncorrected_Zptg50_Event"));
     uncorrected_Zptg50_h_muon.reset(new MuonHists (ctx, "uncorrected_Zptg50_Muon"));
     uncorrected_Zptg50_h_electron.reset(new ElectronHists (ctx, "uncorrected_Zptg50_Electron"));
@@ -245,7 +247,7 @@ namespace uhh2examples {
 
     //output hist after selection
     uncorrected_output_h_jet.reset(new JetHists     (ctx, "uncorrected_output_Jets"));
-    uncorrected_output_h_topjet.reset(new JetHists (ctx, "uncorrected_output_TopJets",4,"patJetsAK8PFCHS"));
+    uncorrected_output_h_topjet.reset(new JetHists (ctx, "uncorrected_output_TopJets",4,"myAK8jets_uncorrected"));
     uncorrected_output_h_event.reset(new EventHists (ctx, "uncorrected_output_Event"));
     uncorrected_output_h_muon.reset(new MuonHists (ctx, "uncorrected_output_Muon"));
     uncorrected_output_h_electron.reset(new ElectronHists (ctx, "uncorrected_output_Electron"));
@@ -310,7 +312,7 @@ namespace uhh2examples {
 
   bool DYModule::process(Event & event) {
     if(berror) std::cout<<" ====================    New Event   ===================="<<std::endl;
-    if(berror) printer->process(event);
+    //  if(berror) printer->process(event);
     vector<Jet>  myAK8jets = event.get(h_myAK8jets);
    
     event.set(h_myAK8jets_uncorrected,myAK8jets);
@@ -321,7 +323,7 @@ namespace uhh2examples {
     uncorrected_input_h_jet   ->fill(event);
     uncorrected_input_h_event   ->fill(event);
     uncorrected_input_h_topjet ->fill(event);
-    uncorrected_input_h_muon   ->fill(event);
+    //  uncorrected_input_h_muon   ->fill(event);
     uncorrected_input_h_electron ->fill(event);
 
 
@@ -333,13 +335,18 @@ namespace uhh2examples {
     ///////////////////////////////////////////////////          Selection    //////////////////////////////////////////
     if(channel=="muon")muo_cleaner->process(event);
     else ele_cleaner->process(event);
+
+
+    if(berror)  std::cout<<"-------- DYModul::uncorrected Selection lep1 sel -------"<<std::endl;
     bool pass_lep1 = lep1_sel->passes(event);
     if(!pass_lep1)return false;
 
+
+    if(berror)  std::cout<<"-------- DYModul::uncorrected Selection Zmasscut -------"<<std::endl;
+    ///////////////////////////////////////////////////          Selection    //////////////////////////////////////////
     bool pass_ZmassCut = Zmass_sel->passes(event);
     if(!pass_ZmassCut)return false;
-
-
+    uncorrected_input_h_muon   ->fill(event);
     if(berror)  std::cout<<"-------- DYModul::uncorrected ZPt <50 -------"<<std::endl;
     ///////////////////////////////////////////////////          ZPt <50     //////////////////////////////////////////
     bool pass_Zptk50 = Zptk50_sel->passes(event);

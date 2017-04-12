@@ -16,8 +16,8 @@ DYHists::DYHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
   MET = book<TH1F>("MET", "uncorrected MET",500,0,500);
 
   ////////////////////////////////////       Response Hist  ///////////////////////////////////////////
-  response_ZP=book<TH2F>("response_ZP", "reponse as function of ZpT",200,0,200,100,0,1);
-  response_NPV=book<TH2F>("response_NPV", "reponse as function of NVP",100,0,50,100,0,1);
+  response_ZP=book<TH2F>("response_ZP", "reponse as function of ZpT",200,0,200,100,0,2);
+  response_NPV=book<TH2F>("response_NPV", "reponse as function of NVP",100,0,50,100,0,2);
   rms_ZP=book<TH2F>("rms_ZP", "rms_ZP",200,0,200,200,0,100);
   rms_uper_ZP=book<TH2F>("rms_uper_ZP", "rms_uper",200,0,200,200,0,100);
   rms_uper_NPV=book<TH2F>("rms_uper_NPV", "rms_uper",200,0,200,200,0,100);
@@ -80,8 +80,12 @@ void DYHists::fill(const Event & event){
    double ZPy = (muon_pos.v4() + muon_neg.v4()).Py()/Z_pt;
 
 
+   if(berror) std::cout<<"DYHists:: unit vectors"<< "  ZPx "<<ZPx<<"  ZPy    "<< ZPy <<"  ZP  "<<Z_pt<<std::endl;
+
    double upar = ZPx * jets_v4.Px() + ZPy * jets_v4.Py();
    double uper= sqrt(jets_v4.pt()*jets_v4.pt() -upar * upar );
+   if(berror) std::cout<<"DYHists::fill response"<<"  upar " <<upar/Z_pt<<"  uper   "<<uper/Z_pt<<std::endl;
+
 
    response_ZP->Fill(Z_pt,-upar/Z_pt,weight);
    response_ZP->Fill(npvs,-upar/Z_pt,weight);

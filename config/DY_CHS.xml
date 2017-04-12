@@ -2,7 +2,7 @@
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
 
 	  <!ENTITY NEVT "-1">
-	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/puppi_test/DY-CHS/muon">
+	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/puppi_test/DY-CHS/elec">
 	  <!ENTITY PROOFdir  "/nfs/dust/cms/user/abenecke/PROOF">
 	  <!ENTITY b_Cacheable  "False">
 
@@ -80,7 +80,7 @@
             <Item Name="use_sframe_weight" Value="false" />
 
             <Item Name="mode" Value="CHS" />
-            <Item Name="channel" Value="muon" />
+            <Item Name="channel" Value="elec" />
           
             <Item Name="pileup_directory" Value="" />
             
