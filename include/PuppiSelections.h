@@ -37,4 +37,14 @@ private:
     TString minmax;
    
 };
+
+
+ class HtSelection: public uhh2::Selection {
+  public:
+    explicit HtSelection(double ht_min=0., double ht_max=-1);
+    virtual bool passes(const uhh2::Event & event);
+ private:
+    double ht_min, ht_max;
+ };
+
 }

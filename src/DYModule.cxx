@@ -48,6 +48,7 @@ namespace uhh2examples {
 
     std::unique_ptr<MuonCleaner> muo_cleaner; 
     std::unique_ptr<ElectronCleaner> ele_cleaner;
+    std::unique_ptr<JetLeptonCleaner> jetlepton_cleaner;
 
     ///////////////////////////    Selections    /////////////////////////////////  
 
@@ -179,10 +180,11 @@ namespace uhh2examples {
    
 
     ///////////////////////////    Cleaner    /////////////////////////////////  
-    muo_cleaner.reset(new MuonCleaner    (AndId<Muon>    (PtEtaCut  (20., 11), MuonIDTight(),MuonIso(0.15))));
+    muo_cleaner.reset(new MuonCleaner    (AndId<Muon>    (PtEtaCut  (20., 11), MuonIDTight(), MuonIso(0.15))));
     ele_cleaner.reset(new ElectronCleaner(AndId<Electron>(PtEtaSCCut(20., 11),Electron_MINIIso(0.15,"delta-beta"))));
-  
-
+    std::vector<std::string>   JEC_AK4 = JERFiles::Summer16_23Sep2016_V4_L123_AK4PFchs_MC;
+    jetlepton_cleaner.reset(new JetLeptonCleaner(ctx,JEC_AK4));
+    jetlepton_cleaner->set_drmax(.4);
 
     ///////////////////////////    Selections    /////////////////////////////////  
     lep1_sel.reset(new uhh2::AndSelection(ctx));
@@ -311,7 +313,12 @@ namespace uhh2examples {
 
 
   bool DYModule::process(Event & event) {
-    if(berror) std::cout<<" ====================    New Event   ===================="<<std::endl;
+    if(berror){
+      std::cout<<" "<<std::endl;
+      std::cout<<" ====================    New Event   ===================="<< "muons  "<<event.muons->size()<< "  electrons  "<<event.electrons->size()<<std::endl;
+      std::cout<<" "<<std::endl;
+    }
+    
     //  if(berror) printer->process(event);
     vector<Jet>  myAK8jets = event.get(h_myAK8jets);
    
@@ -323,7 +330,7 @@ namespace uhh2examples {
     uncorrected_input_h_jet   ->fill(event);
     uncorrected_input_h_event   ->fill(event);
     uncorrected_input_h_topjet ->fill(event);
-    //  uncorrected_input_h_muon   ->fill(event);
+    uncorrected_input_h_muon   ->fill(event);
     uncorrected_input_h_electron ->fill(event);
 
 
@@ -331,22 +338,26 @@ namespace uhh2examples {
     uncorrected_h_topjet_input->fill(event);
     uncorrected_h_DY_input->fill(event);
 
-    if(berror)  std::cout<<"-------- DYModul::uncorrected Selection -------"<<std::endl;
+    if(berror)  std::cout<<"-------- DYModul::uncorrected Selection -------"<< "muons  "<<event.muons->size()<< "  electrons  "<<event.electrons->size()<<std::endl;
     ///////////////////////////////////////////////////          Selection    //////////////////////////////////////////
+  if(berror)   if(event.muons->size())   std::cout<<"pT1 " <<event.muons->at(0).pt() <<"  eta1 " << event.muons->at(0).eta() <<"  tight1 " <<event.muons->at(0).get_bool(Muon::tight) << "  loose1 " <<event.muons->at(0).get_bool(Muon::loose) << "  relIso  " <<event.muons->at(0).relIso()<<std::endl;
+ if(berror) if(event.muons->size()>1)   std::cout<<"pT1 " <<event.muons->at(1).pt() <<"  eta1 " << event.muons->at(1).eta() <<"  tight1 " <<event.muons->at(1).get_bool(Muon::tight) << "  loose1 " <<event.muons->at(1).get_bool(Muon::loose) << "  relIso  " <<event.muons->at(1).relIso()<<std::endl;
+ if(berror) if(event.muons->size()>2)   std::cout<<"pT1 " <<event.muons->at(2).pt() <<"  eta1 " << event.muons->at(2).eta() <<"  tight1 " <<event.muons->at(2).get_bool(Muon::tight) << "  loose1 " <<event.muons->at(2).get_bool(Muon::loose) << "  relIso  " <<event.muons->at(2).relIso()<<std::endl;
+
     if(channel=="muon")muo_cleaner->process(event);
     else ele_cleaner->process(event);
 
-
-    if(berror)  std::cout<<"-------- DYModul::uncorrected Selection lep1 sel -------"<<std::endl;
+    if(berror)  std::cout<<"-------- DYModul::uncorrected Selection lep1 sel -------  "<< "muons  "<<event.muons->size()<< "  electrons  "<<event.electrons->size()<<std::endl;
     bool pass_lep1 = lep1_sel->passes(event);
     if(!pass_lep1)return false;
 
+    jetlepton_cleaner->process(event);
 
     if(berror)  std::cout<<"-------- DYModul::uncorrected Selection Zmasscut -------"<<std::endl;
     ///////////////////////////////////////////////////          Selection    //////////////////////////////////////////
     bool pass_ZmassCut = Zmass_sel->passes(event);
     if(!pass_ZmassCut)return false;
-    uncorrected_input_h_muon   ->fill(event);
+
     if(berror)  std::cout<<"-------- DYModul::uncorrected ZPt <50 -------"<<std::endl;
     ///////////////////////////////////////////////////          ZPt <50     //////////////////////////////////////////
     bool pass_Zptk50 = Zptk50_sel->passes(event);
@@ -418,6 +429,8 @@ namespace uhh2examples {
 
     if(berror)  std::cout<<"-------- DYModul::Selection -------"<<std::endl;
     ///////////////////////////////////////////////////          Selection    //////////////////////////////////////////
+
+
     if(channel=="muon")muo_cleaner->process(event);
     else ele_cleaner->process(event);
     pass_lep1 = lep1_sel->passes(event);

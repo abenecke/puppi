@@ -18,7 +18,8 @@ DYHists::DYHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
   ////////////////////////////////////       Response Hist  ///////////////////////////////////////////
   response_ZP=book<TH2F>("response_ZP", "reponse as function of ZpT",200,0,200,100,0,2);
   response_NPV=book<TH2F>("response_NPV", "reponse as function of NVP",100,0,50,100,0,2);
-  rms_ZP=book<TH2F>("rms_ZP", "rms_ZP",200,0,200,200,0,100);
+  rms_ZP=book<TH2F>("rms_ZP", "rms_ZP",200,0,200,400,-100,100);
+  rms_NPV=book<TH2F>("rms_NPV", "rms_NPV",100,0,50,400,-100,100);
   rms_uper_ZP=book<TH2F>("rms_uper_ZP", "rms_uper",200,0,200,200,0,100);
   rms_uper_NPV=book<TH2F>("rms_uper_NPV", "rms_uper",200,0,200,200,0,100);
 
@@ -45,7 +46,7 @@ void DYHists::fill(const Event & event){
   if(berror)std::cout<<"Number of PV  "<<npvs<<std::endl;
   if(berror)std::cout<<"Number of Jets  "<<jets->size()<<std::endl;
   if(berror)std::cout<<"Number of GenJets  "<<genparticles->size()<<std::endl;
-
+ 
    if(berror) std::cout<<"DYHists::Response hists"<<std::endl;
   /////////////////////////////////////    Response Hists  /////////////////////////////////////////////
    assert(event.muons); // if this fails, it probably means muons are not read in
@@ -78,21 +79,21 @@ void DYHists::fill(const Event & event){
    //unit vector
    double ZPx = (muon_pos.v4() + muon_neg.v4()).Px()/Z_pt;
    double ZPy = (muon_pos.v4() + muon_neg.v4()).Py()/Z_pt;
-
+ 
 
    if(berror) std::cout<<"DYHists:: unit vectors"<< "  ZPx "<<ZPx<<"  ZPy    "<< ZPy <<"  ZP  "<<Z_pt<<std::endl;
-
+   if(berror)std::cout<<"upar2 " << ZPx * jets_v4.Px() + ZPy * jets_v4.Py()<<std::endl;
    double upar = ZPx * jets_v4.Px() + ZPy * jets_v4.Py();
    double uper= sqrt(jets_v4.pt()*jets_v4.pt() -upar * upar );
-   if(berror) std::cout<<"DYHists::fill response"<<"  upar " <<upar/Z_pt<<"  uper   "<<uper/Z_pt<<std::endl;
+   if(berror) std::cout<<"DYHists::fill response"<<" -upar  " <<-upar<<" -upar/Z_pt  " <<-upar/Z_pt<<"  uper/Z_pt   "<<uper/Z_pt<<std::endl;
 
 
    response_ZP->Fill(Z_pt,-upar/Z_pt,weight);
-   response_ZP->Fill(npvs,-upar/Z_pt,weight);
+   response_NPV->Fill(npvs,-upar/Z_pt,weight);
    rms_ZP->Fill(Z_pt,-upar-Z_pt,weight);
+   rms_NPV->Fill(npvs,-upar-Z_pt,weight);
    rms_uper_ZP->Fill(Z_pt,uper,weight);
    rms_uper_NPV->Fill(npvs,uper,weight);
-
 
   if(berror) std::cout<<"DYHists::general hists"<<std::endl;
   /////////////////////////////////////    General Hists  /////////////////////////////////////////////

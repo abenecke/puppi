@@ -20,7 +20,7 @@ public:
     TH1F *MET;
 
     //Response
-    TH2F *response_ZP, *response_NPV,*rms_ZP,*rms_uper_ZP,*rms_uper_NPV;
+    TH2F *response_ZP, *response_NPV,*rms_ZP,*rms_NPV,*rms_uper_ZP,*rms_uper_NPV;
 };
 
 }

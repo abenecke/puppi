@@ -104,3 +104,36 @@ bool ZptCut::passes(const Event & event){
     if(minmax=="min") return inv_pt>threshold;
     return inv_pt<threshold;
 }
+
+
+
+
+HtSelection::HtSelection(double ht_min_, double ht_max_):ht_min(ht_min_), ht_max(ht_max_){}
+bool HtSelection::passes(const Event & event){
+  auto met = event.met->pt();
+ std::vector<Jet>* jets = event.jets;
+
+  double ht = 0.0;
+  double ht_jets = 0.0;
+  double ht_lep = 0.0;
+
+  for(const auto & jet : *jets){
+    ht_jets += jet.pt();
+    }
+  // for(const auto & electron : *event.electrons){
+  //   ht_lep += electron.pt();
+  // }
+  // for(const auto & muon : *event.muons){
+  //   ht_lep += muon.pt();
+  // }
+  /*for(const auto & tau : *event.taus){
+    ht_lep += tau.pt();
+    }*/
+
+  ht =  ht_jets;
+  //  std::cout<<ht<<std::endl;
+  bool pass = false;
+  // pass = ht > ht_min && (ht_max < 0 || ht < ht_max);
+  pass = ht > ht_min;
+  return pass;
+}

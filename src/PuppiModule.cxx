@@ -45,6 +45,7 @@ namespace uhh2examples {
     std::unique_ptr<TopJetCleaner> topjet_pt_30to40_sel;
     std::unique_ptr<TopJetCleaner> topjet_pt_100to150_sel;
 
+    std::unique_ptr<uhh2::Selection> met_sel;
     ///////////////////////////    Hists    /////////////////////////////////  
     
     std::unique_ptr<uhh2::Hists> uncorrected_h_jet;
@@ -129,6 +130,7 @@ namespace uhh2examples {
     topjet_pt_30to40_sel.reset(new TopJetCleaner(ctx,PtEtaCut( 30., 11,40.)));
     topjet_pt_100to150_sel.reset(new TopJetCleaner(ctx,PtEtaCut( 100., 11,150)));
 
+    met_sel.reset(new NJetSelection(1,-1,JetId(PtEtaCut(100,15,200))));
     ///////////////////////////    Hists    /////////////////////////////////  
 
     uncorrected_h_jet.reset(new JetHists     (ctx, "uncorrected_Jets"));
@@ -197,10 +199,10 @@ namespace uhh2examples {
 
   bool PuppiModule::process(Event & event) {
     if(berror) std::cout<<" ====================    New Event   ===================="<<std::endl;
+
     if(berror) printer->process(event);
     vector<Jet>  myAK8jets = event.get(h_myAK8jets);
    
-
     uncorrected_h_jet   ->fill(event);
     uncorrected_h_topjet ->fill(event);
 
@@ -211,9 +213,10 @@ namespace uhh2examples {
     uncorrected_input_h_topjet ->fill(event);
 
 
+  
     uncorrected_h_jet_input->fill(event);
     uncorrected_h_topjet_input->fill(event);
-
+  
     if(berror)  std::cout<<"-------- PuppiModul::uncorrected JetPTScale 30 to 40 -------"<<std::endl;
     ///////////////////////////    Jet PT Scale  30 to 40  ///////////////////////////////// 
     std::unique_ptr< std::vector<Jet> > uncorrected_uncleaned_jets (new std::vector<Jet> (*event.jets));
@@ -296,12 +299,15 @@ namespace uhh2examples {
     sort_by_pt<Jet>(*event.jets);
     event.set(h_myAK8jets_uncorrected,myAK8jets);
 
+   
     input_h_jet   ->fill(event);
     input_h_event   ->fill(event);
     input_h_topjet ->fill(event);
 
-
-    h_jet_input->fill(event);
+    bool pass_met = met_sel->passes(event);
+    if(pass_met){
+      h_jet_input->fill(event);
+    }
     h_topjet_input->fill(event);
 
     if(berror)  std::cout<<"-------- PuppiModul::JetPTScale 30 to 40 -------"<<std::endl;

@@ -12,6 +12,7 @@ using namespace uhh2examples;
 
 PuppiJetHists::PuppiJetHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
   berror=(ctx.get("debug") == "true");
+  berror=false;
   ////////////////////////////////////////////////////////////////       Jet PT Scale       /////////////////////////////////////////////////////////
   JetPtScale_Eta0to1p3 = book<TH2F>("JetPtScale_Eta0to1p3", "Jet p_{T} scale (0<eta<1p3)", 100, 0, 100,200,-1,1); 
   JetPtScale_Eta1p3to2 = book<TH2F>("JetPtScale_Eta1p3to2", "Jet p_{T} scale (1p3<eta<2)", 100, 0, 100,200,-1,1); 
@@ -55,14 +56,13 @@ if(berror) std::cout<<"in PuppiJetHists  "<<std::endl;
   if(berror) std::cout<<"weight  "<<weight<<std::endl;
  
 
-
+  if(berror)std::cout<<"Number of PV  "<<event.pvs->size()<<std::endl;
+  if(berror)std::cout<<"Number of Jets  "<<event.jets->size()<<std::endl;
+ if(berror)std::cout<<"Number of GenJets  "<<event.genjets->size()<<std::endl;
   std::vector<Jet>* jets = event.jets;
   std::vector<Particle>* genparticles = event.genjets;
   double npvs = event.pvs->size();
 
-  if(berror)std::cout<<"Number of PV  "<<npvs<<std::endl;
-  if(berror)std::cout<<"Number of Jets  "<<jets->size()<<std::endl;
- if(berror)std::cout<<"Number of GenJets  "<<genparticles->size()<<std::endl;
   ////////////////////////////////////////   Jet pt scale    /////////////////////////////////////////
   double genp_pt=0;
   //for each jet in the event calculate eta and do matching to GenParticles
@@ -71,9 +71,9 @@ if(berror) std::cout<<"in PuppiJetHists  "<<std::endl;
 
     double jet_eta = jets->at(i).eta();
     double jet_pt = jets->at(i).pt();
-    if(berror) std::cout<<"---------"<<"Jet "<<i<<" ----------"<<std::endl;
-    if(berror)   std::cout<<"Eta Jet  "<<jet_eta<<std::endl;
-    if(berror)   std::cout<<"PT Jet  "<<jet_pt<<std::endl;
+    // if(berror) std::cout<<"---------"<<"Jet "<<i<<" ----------"<<std::endl;
+    // if(berror)   std::cout<<"Eta Jet  "<<jet_eta<<std::endl;
+    // if(berror)   std::cout<<"PT Jet  "<<jet_pt<<std::endl;
 
 
     //do matching to calculate jet pt scale

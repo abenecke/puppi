@@ -10,6 +10,7 @@ using namespace uhh2examples;
 
 PuppiTopJetHists::PuppiTopJetHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
   berror=(ctx.get("debug") == "true");
+  // berror=false;
   ////////////////////////////////////////////////////////////////       TopJet PT Scale       /////////////////////////////////////////////////////////
   TopJetPtScale_Eta0to1p3 = book<TH2F>("TopJetPtScale_Eta0to1p3", "TopJet p_{T} scale (0<eta<1p3)", 100, 0, 100,20,-1,1); 
   TopJetPtScale_Eta1p3to2 = book<TH2F>("TopJetPtScale_Eta1p3to2", "TopJet p_{T} scale (1p3<eta<2)", 100, 0, 100,20,-1,1); 
@@ -75,7 +76,7 @@ void PuppiTopJetHists::fill(const Event & event){
   double npvs = event.pvs->size();
 
   // if(berror) std::cout<<"new jet collection myAK8jets_uncorrected first jet mass  "<<topjets.at(0).v4().mass()<<std::endl;
-  if(berror)std::cout<<"new jet collection myAK8jets_uncorrected first jet mass  "<<topjets.at(0).v4().mass()<<std::endl;
+  if(berror) if(topjets.size())std::cout<<"new jet collection myAK8jets_uncorrected first jet mass  "<<topjets.at(0).v4().mass()<<std::endl;
   if(berror)std::cout<<"Number of PV  "<<npvs<<std::endl;
   if(berror)std::cout<<"Number of Topjets  "<<topjets.size()<<std::endl;
   if(berror)std::cout<<"Number of GenTopjets  "<<genparticles->size()<<std::endl;
@@ -83,7 +84,6 @@ void PuppiTopJetHists::fill(const Event & event){
   ////////////////////////////////////////   TopJet pt scale    /////////////////////////////////////////
   double genp_pt=0;
   //for each jet in the event calculate eta and do matching to GenParticles
-
   for(unsigned int i=0;i<topjets.size();i++){
 
     double topjet_eta = topjets.at(i).eta();
@@ -92,16 +92,18 @@ void PuppiTopJetHists::fill(const Event & event){
     if(berror)   std::cout<<"Eta TopJet  "<<topjet_eta<<std::endl;
     if(berror)   std::cout<<"PT TopJet  "<<topjet_pt<<std::endl;
 
-
+    
+   
     //do matching to calculate topjet pt scale
     for(unsigned int j=0;j<genparticles->size();j++){
-      double deltaR_gen_topjet = deltaR(genparticles->at(j),topjets.at(i));
-      if(berror)   std::cout<<"Delta R Genparticle TopJet  "<<deltaR_gen_topjet<<std::endl;
+    double  deltaR_gen_topjet = deltaR(genparticles->at(j),topjets.at(i));
+      // if(berror)   std::cout<<"Delta R Genparticle TopJet  "<<deltaR_gen_topjet<<std::endl;
+      //  std::cout<<j<<" "<<genp_pt<<std::endl;
       if(deltaR_gen_topjet<0.4) genp_pt = genparticles->at(j).pt();
     }//for-loop over all genparticles
 
     if(berror)  std::cout<<"Pt Genparticle  "<< genp_pt <<std::endl;
-
+    
     double topjet_pt_scale = (topjet_pt - genp_pt)/genp_pt;
     if(0<= topjet_eta && topjet_eta <=1.3){
       TopJetPtScale_Eta0to1p3->Fill(npvs,topjet_pt_scale, weight);
@@ -134,7 +136,7 @@ void PuppiTopJetHists::fill(const Event & event){
     //do matching to calculate topjet mass scale
     for(unsigned int j=0;j<genparticles->size();j++){
       double deltaR_gen_topjet = deltaR(genparticles->at(j),topjets.at(i));
-      if(berror)   std::cout<<"Delta R Genparticle TopJet  "<<deltaR_gen_topjet<<std::endl;
+      // if(berror)   std::cout<<"Delta R Genparticle TopJet  "<<deltaR_gen_topjet<<std::endl;
       if(deltaR_gen_topjet<0.4){
 	genp_mass = genparticles->at(j).v4().M();
 	if(berror)	std::cout<<"mass gen  "<<genp_mass <<std::endl;

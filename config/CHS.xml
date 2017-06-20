@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
 
-	  <!ENTITY NEVT "-1">
+	  <!ENTITY NEVT "50000">
 	  <!ENTITY SELdir "/nfs/dust/cms/user/abenecke/ZPrimeTotTPrime/CMSSW_8X/rootfiles/puppi_test">
 	  <!ENTITY PROOFdir  "/nfs/dust/cms/user/abenecke/PROOF">
 	  <!ENTITY b_Cacheable  "False">
 
-	  <!ENTITY MC_QCD_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Flat_pythia8.xml"> 
+
+	  <!ENTITY QCD_8_0_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Flat_pythia8.xml">
+	  <!ENTITY QCD_9_1_CHS "/nfs/dust/cms/user/abenecke/CMSSW_9_1_0_pre3/src/UHH2/core/QCD_9_1.root">
+	  <!ENTITY QCD_udzcutfalse_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/Puppi/file/QCD_UsedzCutFalse_AK4.xml">
+
+
 	  <!ENTITY MC_GJets_HT_100To200_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_GJets_HT-100To200.xml"> 
 	  <!ENTITY MC_GJets_HT_200To400_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_GJets_HT-200To400.xml"> 
 	  <!ENTITY MC_GJets_HT_400To600_CHS SYSTEM "/nfs/dust/cms/user/abenecke/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_GJets_HT-400To600.xml"> 
@@ -30,11 +35,17 @@
 
 
  <!--                    QCD                   -->
-  <InputData Version="MC_QCD_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
-    &MC_QCD_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
+ <!--<InputData Version="QCD_8_0_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &QCD_8_0_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
+ 
+ <InputData Version="QCD_9_1_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    <In FileName="&QCD_9_1_CHS;" Lumi="0.0"/>  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> 
+
+ <!--<InputData Version="QCD_udzcutfalse_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+    &QCD_udzcutfalse_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
  
     <!--                    GJets                   -->
- <InputData Version="MC_GJets_HT_100To200_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
+<!-- <InputData Version="MC_GJets_HT_100To200_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_GJets_HT_100To200_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
   <InputData Version="MC_GJets_HT_200To400_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_GJets_HT_200To400_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
@@ -43,15 +54,15 @@
   <InputData Version="MC_GJets_HT_40To100_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
     &MC_GJets_HT_40To100_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>  
   <InputData Version="MC_GJets_HT_600ToInf_CHS" Lumi="1" Type="MC" NEventsMax="&NEVT;" Cacheable="&b_Cacheable;">
-    &MC_GJets_HT_600ToInf_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>    
+    &MC_GJets_HT_600ToInf_CHS; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>    -->
      
         
             
         <UserConfig>
             <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" /> 
-            <Item Name="MuonCollection" Value="slimmedMuonsUSER" />
+        <!--    <Item Name="MuonCollection" Value="slimmedMuonsUSER" />-->
             <Item Name="JetCollection" Value="slimmedJets" />
-	    <Item Name="TopJetCollection" Value="slimmedJetsAK8_SoftDrop" />
+	  <!--  <Item Name="TopJetCollection" Value="patJetsAK8PFCHS" />-->
             <Item Name="GenJetCollection" Value="slimmedGenJets" />
 	    <Item Name="GenTopJetCollection" Value="ak8GenJetsSoftDrop" />
             <Item Name="METName" Value="slimmedMETs" />
